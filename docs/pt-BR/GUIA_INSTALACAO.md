@@ -90,3 +90,11 @@ Execute estes comandos sempre na raiz do projeto dentro do WSL:
 *   `make seed`: Carrega dados de teste no Neo4j.
 *   `make clean`: Para tudo e remove os volumes do banco (reseta o banco de dados).
 *   `make check`: Roda ferramentas de qualidade (lint e tipos).
+
+---
+
+## Solução de Problemas (Troubleshooting)
+
+### Erro `Invalid value for NEO4J_AUTH: 'neo4j/'`
+Se ao rodar `make dev` o container `bracc-neo4j` falhar com esse erro, verifique se o arquivo `.env` existe na raiz do projeto e se a variável `NEO4J_PASSWORD` está preenchida corretamente.
+O comando `make dev` agora carrega o `.env` automaticamente, mas o arquivo precisa estar presente.

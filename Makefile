@@ -2,11 +2,11 @@
 
 # Development
 dev:
-	docker compose -f infra/docker-compose.yml up --build -d
+	docker compose --env-file .env -f infra/docker-compose.yml up --build -d
 
 # Stop services
 stop:
-	docker compose -f infra/docker-compose.yml down
+	docker compose --env-file .env -f infra/docker-compose.yml down
 
 # Seed Neo4j with development fixture data
 seed:
