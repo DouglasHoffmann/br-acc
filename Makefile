@@ -10,8 +10,12 @@ stop:
 
 # Seed Neo4j with development fixture data
 seed:
-	@if [ -f .env ]; then export $$(cat .env | xargs); fi; \
-	bash infra/scripts/seed-dev.sh
+	@if [ -f .env ]; then \
+		NEO4J_PASSWORD=$$(grep '^NEO4J_PASSWORD=' .env | cut -d '=' -f2) \
+		bash infra/scripts/seed-dev.sh; \
+	else \
+		bash infra/scripts/seed-dev.sh; \
+	fi
 
 # Quality check (simulating CI checks)
 check:
