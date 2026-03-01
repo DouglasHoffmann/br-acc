@@ -93,6 +93,43 @@ Execute estes comandos sempre na raiz do projeto dentro do WSL:
 
 ---
 
+## Como Baixar Dados Reais
+
+O projeto possui scripts específicos para baixar bases de dados públicas reais. Esses scripts salvam os arquivos na pasta `data/`, que é então lida pelo motor de ETL.
+
+### 1. Baixando bases via Scripts (Pasta `scripts/`)
+Existem scripts individuais para fontes que não possuem download automático via CLI:
+
+*   **Comprasnet (Contratos Federais):**
+    ```bash
+    python3 scripts/download_comprasnet.py 2024
+    ```
+*   **Datasus (Dados de Saúde):**
+    ```bash
+    python3 scripts/download_datasus.py
+    ```
+*   **DOU (Diário Oficial da União):**
+    ```bash
+    bash scripts/download_dou.sh
+    ```
+
+### 2. Baixando CNPJ via CLI (Recomendado para início)
+Para a base de CNPJs (Receita Federal), use o comando integrado:
+```bash
+cd etl
+uv run bracc-etl download --source cnpj --files 1
+```
+
+### 3. Carregando os dados no Neo4j
+Após o download, os arquivos estarão em `data/<fonte>`. Para processá-los e enviá-los ao grafo:
+```bash
+cd etl
+uv run bracc-etl run --source <nome_da_fonte> --neo4j-password bracc-local-dev
+```
+*(Substitua `<nome_da_fonte>` por `cnpj`, `comprasnet`, `tse`, etc.)*
+
+---
+
 ## Solução de Problemas (Troubleshooting)
 
 ### Erro `Invalid value for NEO4J_AUTH: 'neo4j/'`

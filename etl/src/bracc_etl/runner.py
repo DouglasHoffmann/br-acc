@@ -180,11 +180,12 @@ def run(
 
 
 @cli.command()
-@click.option("--output-dir", default="./data/cnpj", help="Output directory")
+@click.option("--source", default="cnpj", type=click.Choice(["cnpj"]), help="Source to download")
+@click.option("--output-dir", default=None, help="Output directory (defaults to ./data/<source>)")
 @click.option("--files", type=int, default=10, help="Number of files per type (0-9)")
 @click.option("--skip-existing/--no-skip-existing", default=True)
-def download(output_dir: str, files: int, skip_existing: bool) -> None:
-    """Download CNPJ data from Receita Federal."""
+def download(source: str, output_dir: str | None, files: int, skip_existing: bool) -> None:
+    """Download public data from official sources (currently supports: cnpj)."""
     import zipfile
     from pathlib import Path
 
@@ -192,10 +193,13 @@ def download(output_dir: str, files: int, skip_existing: bool) -> None:
 
     logger = logging.getLogger(__name__)
 
+    if source != "cnpj":
+        raise click.ClickException(f"Download not yet automated for source: {source}")
+
     base_url = "https://dadosabertos.rfb.gov.br/CNPJ/"
     file_types = ["Empresas", "Socios", "Estabelecimentos"]
 
-    out = Path(output_dir)
+    out = Path(output_dir) if output_dir else Path("./data") / source
     out.mkdir(parents=True, exist_ok=True)
 
     for file_type in file_types:
